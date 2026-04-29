@@ -39,3 +39,8 @@ jobs:
       steps:
         - name: Configurar o DOcker na VM
           uses: docker/build-push-action@v7.1.0
+          with:
+            push: true
+            tags: |
+              deborafraga/senai_api_ta:latest
+              deborafraga/senai_api_ta:${{github.sha}}
