@@ -66,3 +66,18 @@ jobs:
           script: |
             # teste de acesso
             echo "Acesso liberado"
+
+            # fazer o pull da imagem dockerhub
+            sudo docker pull deborafraga/senai_api_ta:latest
+
+            # Parar o app atual remover o container
+            sudo docker stop senai_api_ta 2>/dev/null || true
+            sudo docker rm senai_api_ta 2>/dev/null || true
+
+            # Publicar novo container
+            sudo docker run --name senai_api_taa -d -p 80:8080 deborafraga/senai_api_ta:latest
+
+            # Verificar se publicou
+            sleep 5
+            curl -f http://localhost/health || exit 1
+            echo "Deploy feito com sucesso"
