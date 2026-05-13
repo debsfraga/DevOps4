@@ -50,3 +50,17 @@ jobs:
             tags: |
               deborafraga/senai_api_ta:latest
               deborafraga/senai_api_ta:${{github.sha}}
+
+DEPLOY:
+  name: Implementando na EC2
+  run-on: ubuntu-latest
+  needs: Imagem
+
+  steps:
+    - name: Deploy na EC2 via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{secrets.EC2_HOST}}
+        username: ${{secrets.EC2_USER}}
+        key: ${{secrets>EC2_KEY}}
+        script:
