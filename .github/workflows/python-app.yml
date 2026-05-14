@@ -2,9 +2,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ] #CI roda nas duas branches
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ] #PR só pode ir para main
 
 jobs:
   build:
@@ -36,6 +36,8 @@ jobs:
       name: Construindo Imagem para Docker
       runs-on: ubuntu-latest
       needs: build
+      # Só sobe imagem se for na main
+      if: github.ref == 'refs/heads/main'
       steps:
         - name: Docker Login
           uses: docker/login-action@v4.1.0
@@ -55,7 +57,8 @@ jobs:
     name: Implementando na EC2
     runs-on: ubuntu-latest
     needs: Imagem
-
+    # Só faz deploy se for na main
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy na EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
